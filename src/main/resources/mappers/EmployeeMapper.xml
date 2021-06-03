@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="exam_minjeong.mapper.EmployeeMapper">
+	
+	<resultMap type="Employee" id="resEmp">
+		<id column="EMP_NO" property="no" />
+		<result column="EMP_NAME" property="name" />
+		<association property="manager" javaType="Employee">
+			<result column="MANAGER_NO" property="no"/>		
+		</association>
+		<association property="title" javaType="Title">
+			<result column="TITLE_NO" property="no"/>
+			<result column="TITLE_NAME" property="name"/>
+		</association>
+		<association property="dept" javaType="Department">
+			<result column="DEPT_NO" property="no"/>
+			<result column="DEPT_NAME" property="name"/>
+			<result column="FLOOR" property="floor"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectEmployeeAll" resultMap="resEmp">
+		select EMP_NO, EMP_NAME, TITLE_NO, TITLE_NAME, MANAGER_NO, SALARY, DEPT_NO
+		from vw_full_employee
+	</select>
+	
+	<select id="selectByNo" resultMap="resEmp">
+		select EMP_NO, EMP_NAME, TITLE_NO, TITLE_NAME, MANAGER_NO, SALARY, DEPT_NO
+		from vw_full_employee
+		where EMP_NO = #{no}
+	</select>
+	
+	<insert id="insertEmployee">
+		insert into employee(EMP_NO, EMP_NAME, TNO, MANAGER, SALARY, DNO)
+		values (#{no}, #{name}, #{title.no}, #{manager.no}, #{salary}, #{dept.no})
+	</insert>
+	
+	<update id="updateEmployee">
+		update employee
+		set EMP_NAME = #{name}, TNO = #{title.no}, MANAGER = #{manager.no}, SALARY = #{salary}, DNO = #{dept.no}
+		where EMP_NO = #{no}
+	</update>
+	
+	<delete id="deleteEmployee">
+		delete
+		from employee
+		where EMP_NO = #{no}
+	</delete>
+</mapper>
